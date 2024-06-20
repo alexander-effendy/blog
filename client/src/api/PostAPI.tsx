@@ -43,3 +43,17 @@ export const editPostAPI = async (newPost: any, postId: Number) => {
     console.error(error);
   }
 }
+
+export const deletePostAPI = async (postId: Number) => {
+  console.log('now deleting post id:' + postId)
+  try {
+    const response = await fetch(`http://127.0.0.1:8000/api/posts/${postId}/`, {
+      method: 'DELETE',
+    })
+    if (!response.ok) {
+      throw new Error('Cannot delete post');
+    }    
+  } catch (error) {
+    console.error(error);
+  }
+}

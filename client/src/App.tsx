@@ -1,23 +1,12 @@
 import { useMediaQuery } from '@mui/material';
 import _default from '@mui/material/styles/identifier';
 import { useState, useEffect } from 'react';
-import { fetchPostsAPI, addPostAPI, editPostAPI } from './api/PostAPI';
+import { fetchPostsAPI, addPostAPI, editPostAPI, deletePostAPI } from './api/PostAPI';
 import './index.css'
 import PropTypes from 'prop-types';
 
 import MyDialog from './assets/Modals/AddPostModal';
 import EditDialog from './assets/Modals/EditPostModal';
-
-const SideBar = () => {
-  const smallPage = useMediaQuery('(max-width:900px');
-
-  return (
-    <div className={`${smallPage ? 'hidden' : 'fixed w-[300px]'}`}>
-      <div className="font-bold text-2xl">Blog Post</div>
-      <div className="">Made by Alex :)</div>
-    </div>
-  )
-}
 
 function App() {
   const BlogFullWidth = useMediaQuery('(max-width:900px)');
@@ -56,6 +45,15 @@ function App() {
     loadData();
   }
 
+  const deletePost = async (postId: Number) => {
+    try {
+      await deletePostAPI(Number(postId));
+      loadData();
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   useEffect(() => {      
     loadData();
   }, [refresh])
@@ -65,17 +63,27 @@ function App() {
       <div className="border-[1px] border-black rounded-lg p-4">
         <section className="flex justify-between">
           <div className="font-bold mb-5">{post.title}</div>
+            <section className="flex gap-2">
+              <button className="h-[30px] my-auto border-black border-[1px] hover:bg-slate-100 text-black px-3 rounded-lg"
+              onClick={() => {
+                setEditedId(post.id);
+                setNewTitle(post.title);
+                setNewBody(post.body);
+                openModal2();
+              }}
+            >
+              Edit
+            </button>
+
+            <button className="h-[30px] my-auto border-black border-[1px] hover:bg-slate-100 text-black px-3 rounded-lg"
+              onClick={() => deletePost(post.id)}
+            >
+              Delete
+            </button>
+          </section>
+          
         </section>
-        <button className="h-[30px] my-auto border-black border-[1px] hover:bg-slate-100 text-black px-3 rounded-lg"
-          onClick={() => {
-            setEditedId(post.id);
-            setNewTitle(post.title);
-            setNewBody(post.body);
-            openModal2();
-          }}
-        >
-          Edit
-        </button>
+       
         <div className="text-slate-500">{post.body}</div>
       </div>
     )
@@ -130,13 +138,12 @@ function App() {
 
   return (
     <div className="h-screen w-full bg-white overflow-hidden">
-
       {/* modals */}
       <MyDialog isOpen={isOpen} openModal={openModal} closeModal={closeModal} handleTitleChange={handleTitleChange} handleBodyChange={handleBodyChange} handleAddPost={handleAddPost} />
       <EditDialog postId={editedId} postTitle={newTitle} postBody={newBody} isOpen={isOpen2} openModal={openModal2} closeModal={closeModal2} handleTitleChange={handleTitleChange} handleBodyChange={handleBodyChange} handleEditPost={handleEditPost} />
 
       {/* main context of the page */}
-      <section className={`${BlogFullWidth ? 'ml-0' : 'ml-0'} px-[5%] md:px-[10%] pt-[50px] bg-yellow0-200 flex justify-between`}>
+      <section className={`bg-slate-100 opacity-95 items-center px-[5%] md:px-[10%] pt-[20px] pb-[20px] flex justify-between`}>
         <section>
           <div className="font-bold text-2xl text-black">blogpost</div>
           <div className="text-slate-500">Welcome to my blog post website, feel free to create, remove, edit, delete your post</div>
@@ -145,7 +152,8 @@ function App() {
           className="bg-black text-white rounded-lg px-5 h-[40px] lg:text-[15px] text-[12px] hover:bg-slate-500"
           onClick={openModal}
         >
-          Add new post</button>
+          Add new post
+        </button>
       </section>
 
       {/* blog posts rendered here */}
