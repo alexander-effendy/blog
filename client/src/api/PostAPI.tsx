@@ -1,4 +1,4 @@
-export const fetchPostAPI = async () => {
+export const fetchPostsAPI = async () => {
   try {
     const response = await fetch('http://127.0.0.1:8000/api/posts/')
     if (!response.ok) {
@@ -11,7 +11,7 @@ export const fetchPostAPI = async () => {
   }
 }
 
-export const addPostAPI = async (newPost) => {
+export const addPostAPI = async (newPost: any) => {
   try {
     const response = await fetch('http://127.0.0.1:8000/api/posts/', {
       method: 'POST',
