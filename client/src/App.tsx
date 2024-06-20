@@ -145,7 +145,7 @@ function App() {
       {/* main context of the page */}
       <section className={`bg-slate-100 opacity-95 items-center px-[5%] md:px-[10%] pt-[20px] pb-[20px] flex justify-between`}>
         <section>
-          <div className="font-bold text-2xl text-black">blogpost</div>
+          <div className="font-bold text-2xl text-black">blog<span className="text-slate-500">post</span></div>
           <div className="text-slate-500">Welcome to my blog post website, feel free to create, remove, edit, delete your post</div>
         </section>
         <button 
@@ -158,6 +158,9 @@ function App() {
 
       {/* blog posts rendered here */}
       <section style={{ height: 'calc(100vh - 12rem)'}} className={`${BlogFullWidth ? 'ml-0' : 'ml-[0px]'} px-[5%] md:px-[10%] pb-[50px] flex-grow pt-0 overflow-y-auto flex flex-col gap-10 mt-10`}>
+        {data.length === 0 && 
+          <div className="w-full h-full grid place-items-center text-2xl font-bold">Click on the 'Add new post' button to make a new post!</div>
+        }
         {data.map((post, index) => (
           <PostComponent key={index} post={post} />
         ))}

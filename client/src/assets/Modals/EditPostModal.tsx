@@ -50,7 +50,7 @@ const MyDialog: React.FC<MyDialogProps> = ({ postId, postTitle, postBody, isOpen
                   </Dialog.Title>
                   <div className="mt-2">
                     <p className="text-sm text-gray-500">
-                      We have received your request. A team member will approach your table shortly.
+                      Feel free to edit your post!
                     </p>
                   </div>
 

@@ -47,18 +47,18 @@ const MyDialog: React.FC<MyDialogProps> = ({ isOpen, closeModal, handleTitleChan
                   </Dialog.Title>
                   <div className="mt-2">
                     <p className="text-[15px] text-gray-500">
-                      Tell us a bit about your day
+                      What kind of blog post are you writing now?!
                     </p>
                   </div>
 
                   <div className="flex flex-col">
                     <section className="flex flex-col mt-5">
                       <label>Title:</label>
-                      <input onChange={handleTitleChange} className="rounded-lg h-[30px] w-full"/>
+                      <input onChange={handleTitleChange} className="rounded-lg border-[1px] border-black h-[30px] w-full"/>
                     </section>
                     
                     <label className="mt-5">Body:</label>
-                    <textarea onChange={handleBodyChange} className="rounded-lg" rows={5} />
+                    <textarea className="h-[100px] w-full rounded-lg border-[1px] border-black" onChange={handleBodyChange} rows={5} />
                   </div>
 
                   <div className="mt-4 flex justify-end gap-2">
