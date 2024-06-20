@@ -24,5 +24,22 @@ export const addPostAPI = async (newPost: any) => {
   } catch (error) {
     console.error(error);
   }
-  
+}
+
+export const editPostAPI = async (newPost: any, postId: Number) => {
+  try {
+    const response = await fetch(`http://127.0.0.1:8000/api/posts/${postId}/`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(newPost),
+    });
+    if(!response.ok) {
+      console.log(response);
+      throw new Error('Cannot addPost');
+    }
+  } catch (error) {
+    console.error(error);
+  }
 }

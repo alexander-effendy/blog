@@ -1,9 +1,12 @@
 import { useMediaQuery } from '@mui/material';
 import _default from '@mui/material/styles/identifier';
 import { useState, useEffect } from 'react';
-import { fetchPostsAPI, addPostAPI } from './api/PostAPI';
+import { fetchPostsAPI, addPostAPI, editPostAPI } from './api/PostAPI';
 import './index.css'
 import PropTypes from 'prop-types';
+
+import MyDialog from './assets/Modals/AddPostModal';
+import EditDialog from './assets/Modals/EditPostModal';
 
 const SideBar = () => {
   const smallPage = useMediaQuery('(max-width:900px');
@@ -44,6 +47,15 @@ function App() {
     setRefresh(!refresh);
   }
 
+  const editPost = async (newPost: any, postId: Number) => {
+    try {
+      await editPostAPI(newPost, postId);
+    } catch (error) {
+      console.error(error);
+    }
+    loadData();
+  }
+
   useEffect(() => {      
     loadData();
   }, [refresh])
@@ -54,6 +66,16 @@ function App() {
         <section className="flex justify-between">
           <div className="font-bold mb-5">{post.title}</div>
         </section>
+        <button className="h-[30px] my-auto border-black border-[1px] hover:bg-slate-100 text-black px-3 rounded-lg"
+          onClick={() => {
+            setEditedId(post.id);
+            setNewTitle(post.title);
+            setNewBody(post.body);
+            openModal2();
+          }}
+        >
+          Edit
+        </button>
         <div className="text-slate-500">{post.body}</div>
       </div>
     )
@@ -80,6 +102,13 @@ function App() {
   const openModal = () => setIsOpen(true);
   const closeModal = () => setIsOpen(false);
 
+  const [isOpen2, setIsOpen2] = useState(false);
+
+  const openModal2 = () => {
+    setIsOpen2(true);
+  }
+  const closeModal2 = () => setIsOpen2(false);
+
   const handleAddPost = () => {
     console.log('adding post')
     const newPost = {
@@ -89,8 +118,23 @@ function App() {
     addPost(newPost);
   }
 
+  const handleEditPost = (editedId: any) => {
+    const newPost = {
+      title: newTitle,
+      body: newBody
+    }
+    console.log(editedId);
+
+    editPost(newPost, editedId)
+  }
+
   return (
     <div className="h-screen w-full bg-white overflow-hidden">
+
+      {/* modals */}
+      <MyDialog isOpen={isOpen} openModal={openModal} closeModal={closeModal} handleTitleChange={handleTitleChange} handleBodyChange={handleBodyChange} handleAddPost={handleAddPost} />
+      <EditDialog postId={editedId} postTitle={newTitle} postBody={newBody} isOpen={isOpen2} openModal={openModal2} closeModal={closeModal2} handleTitleChange={handleTitleChange} handleBodyChange={handleBodyChange} handleEditPost={handleEditPost} />
+
       {/* main context of the page */}
       <section className={`${BlogFullWidth ? 'ml-0' : 'ml-0'} px-[5%] md:px-[10%] pt-[50px] bg-yellow0-200 flex justify-between`}>
         <section>
@@ -105,7 +149,7 @@ function App() {
       </section>
 
       {/* blog posts rendered here */}
-      <section style={{ height: 'calc(100vh - 12rem)'}} className={`${BlogFullWidth ? 'ml-0' : 'ml-[300px]'} px-[5%] md:px-[10%] pb-[50px] flex-grow pt-0 overflow-y-auto flex flex-col gap-10 mt-10`}>
+      <section style={{ height: 'calc(100vh - 12rem)'}} className={`${BlogFullWidth ? 'ml-0' : 'ml-[0px]'} px-[5%] md:px-[10%] pb-[50px] flex-grow pt-0 overflow-y-auto flex flex-col gap-10 mt-10`}>
         {data.map((post, index) => (
           <PostComponent key={index} post={post} />
         ))}
